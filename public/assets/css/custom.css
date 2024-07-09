@@ -1,0 +1,26 @@
+@import "../base/js/vendor/highcharts/highcharts.css";
+
+.validation-invalid-label-new{
+    color:#ef4444;
+    font-size: 0.75rem;
+    padding-left: 5px;
+    padding-right: 5px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    margin-top: 5px;
+    border: 1px solid #ef4444;
+    border-radius: 0.25rem;
+    background-color: #fcd9d9;
+}
+
+
+input[readonly] {
+    background-color: #eaeaea !important;
+}
+input[disabled] {
+    background-color: #eaeaea !important;
+}
+
+.table_border_hijau{
+    border-color: #04966987 !important;
+}
