@@ -35,7 +35,7 @@
                               <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle">Target</th>
                               <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle">Realisasi</th>
                               <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle">% Capaian</th>
-                              <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle">% Anggaran</th>
+                              {{-- <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle">% Anggaran</th> --}}
                            </tr>
                         </thead>
                      </table>
@@ -134,10 +134,10 @@
                   "bSortable": false,
                   "sClass": "text-center"
                },
-               {
-                  "bSortable": false,
-                  "sClass": "text-center"
-               },
+               // {
+               //    "bSortable": false,
+               //    "sClass": "text-center"
+               // },
             ],
             drawCallback: function(settings) {
                App.initCore();
