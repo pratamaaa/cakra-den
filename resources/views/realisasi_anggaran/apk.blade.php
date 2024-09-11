@@ -15,9 +15,9 @@
                <li class="nav-item">
                   <a href="#js-tab1" class="nav-link fw-medium fw-semibold active" data-bs-toggle="tab">Realisasi APK DEN</a>
                </li>
-               <li class="nav-item">
+               {{-- <li class="nav-item">
                   <a href="#js-tab2" class="nav-link fw-medium fw-semibold" data-bs-toggle="tab">16 Program</a>
-               </li>
+               </li> --}}
             </ul>
 
 

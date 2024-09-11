@@ -68,7 +68,7 @@ class CapaiankinerjaController extends Controller
                     $aaData[$index][] = $row->indikator_kinerja_target;
                     $aaData[$index][] = $row->indikator_kinerja_realisasi;
                     $aaData[$index][] = $row->indikator_kinerja_persen_capaian;
-                    $aaData[$index][] = $row->indikator_kinerja_persen_anggaran;
+                    // $aaData[$index][] = $row->indikator_kinerja_persen_anggaran;
                     $nomor++;
                 }
             }
