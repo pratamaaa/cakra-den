@@ -34,6 +34,7 @@
    <script src="{{ URL::asset('assets/base/js/vendor/tables/datatables/extensions/pdfmake/vfs_fonts.min.js') }}"></script>
    <script src="{{ URL::asset('assets/base/js/vendor/tables/datatables/extensions/buttons.min.js') }}"></script>
    <script src="{{ URL::asset('assets/base/js/vendor/tables/datatables/extensions/row_group.js') }}"></script>
+   
 
    <script src="{{ URL::asset('assets/base/js/vendor/ui/moment/moment.min.js') }}"></script>
    <script src="{{ URL::asset('assets/base/js/vendor/pickers/daterangepicker.js') }}"></script>

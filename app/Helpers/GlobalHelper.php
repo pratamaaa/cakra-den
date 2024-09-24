@@ -283,7 +283,7 @@ class GlobalHelper
             return is_numeric($binding) ? $binding : "'{$binding}'";
         })->toArray());
     }
-    public static function Datatable($nama_table = '', $field_name = array(), $where_data = array(), $default_order = '', $request)
+    public static function Datatable($request, $nama_table = '', $field_name = array(), $where_data = array(), $default_order = '')
     {
 
         $limit_start = (($request->input('start') != null) ? $request->input('start') : 0);

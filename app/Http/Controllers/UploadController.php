@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use App\Models\Trx_upload;
 use App\Imports\Trx_work_programsImport;
+use App\Imports\MultipleSheetsImport;
 
 class UploadController extends Controller
 {
@@ -27,7 +28,55 @@ class UploadController extends Controller
         // die();
         return view('upload.index', $data);
     }
+    public function create2(Request $request)
+    {
+        $data = array();
 
+        if ($this->method == 'POST') {
+            $document_type = $request->input('jenis_upload', 1);
+            $tahun = $request->input('tahun', date('Y'));
+            $bulan = $request->input('bulan', date('m'));
+            $filePath = $request->file('upload_file')->store('uploads');
+
+            // Path ke file yang diupload
+            $fullPath = storage_path('app/' . $filePath);
+
+            // Inisialisasi MultipleSheetsImport dengan file path
+            try {
+                $import = new MultipleSheetsImport($fullPath, $tahun, $bulan, $document_type);
+
+                // Lakukan impor
+                Excel::import($import, $fullPath);
+
+                echo 'ok';
+                die();
+            } catch (\Exception $e) {
+                echo '<pre>';
+                print_r($e->getMessage());
+                die();
+            }
+
+            // try {
+            //     $request->validate([
+            //         'upload_file' => 'required|mimes:xls,xlsx'
+            //     ]);
+
+            //     Excel::import(new MultipleSheetsImport($request->file('upload_file')), $request->file('upload_file'));
+            //     echo 'ok';
+            //     die();
+            //     return back()->with('success', 'Excel file uploaded and data imported successfully.');
+            // } catch (\Exception $e) {
+            //     //DB::rollback();
+            //     echo '<pre>';
+            //     print_r($e->getMessage());
+            //     die();
+            //     $data['error'] = $e->getMessage();
+            // }
+        } else {
+            $data['temp_uuid'] = $this->uuid();
+        }
+        return view('upload.create2', $data);
+    }
     public function create(Request $request)
     {
         $data = array();
@@ -66,7 +115,7 @@ class UploadController extends Controller
                 $path = Storage::path('upload/' . $document_name . '.xlsx');
 
                 //Excel::import(new Trx_work_programsImport(), request()->file('upload_file'));
-              
+
                 Excel::import(new RealisasiImport($tahun, $bulan, $document_type), request()->file('upload_file'));
 
                 //$array = Excel::toArray([], request()->file('upload_file'));

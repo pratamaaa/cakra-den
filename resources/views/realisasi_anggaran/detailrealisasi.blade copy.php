@@ -105,22 +105,7 @@
                         <div class="ms-auto">
 
                            <div class="input-group">
-                              <span class="input-group-text">Periode Anggaran</span>
-                              <select class="form-control select center" data-placeholder="Bulan" id="anggaran_bulan" name="anggaran_bulan" onchange="set_tahun(this)">
-                                 <option></option>
-                                 <option value="1" {{ date('m') == 1 ? 'selected' : '' }}>{{ strtoupper('Januari') }}</option>
-                                 <option value="2" {{ date('m') == 2 ? 'selected' : '' }}>{{ strtoupper('Februari') }}</option>
-                                 <option value="3" {{ date('m') == 3 ? 'selected' : '' }}>{{ strtoupper('Maret') }}</option>
-                                 <option value="4" {{ date('m') == 4 ? 'selected' : '' }}>{{ strtoupper('April') }}</option>
-                                 <option value="5" {{ date('m') == 5 ? 'selected' : '' }}>{{ strtoupper('Mei') }}</option>
-                                 <option value="6" {{ date('m') == 6 ? 'selected' : '' }}>{{ strtoupper('Juni') }}</option>
-                                 <option value="7" {{ date('m') == 7 ? 'selected' : '' }}>{{ strtoupper('Juli') }}</option>
-                                 <option value="8" {{ date('m') == 8 ? 'selected' : '' }}>{{ strtoupper('Agustus') }}</option>
-                                 <option value="9" {{ date('m') == 9 ? 'selected' : '' }}>{{ strtoupper('September') }}</option>
-                                 <option value="10" {{ date('m') == 10 ? 'selected' : '' }}>{{ strtoupper('Oktober') }}</option>
-                                 <option value="11" {{ date('m') == 11 ? 'selected' : '' }}>{{ strtoupper('November') }}</option>
-                                 <option value="12" {{ date('m') == 12 ? 'selected' : '' }}>{{ strtoupper('Desember') }}</option>
-                              </select>
+                              <span class="input-group-text">Tahun Anggaran</span>
                               <input type="text" class="form-control datepicker-default-view text-end" readonly placeholder="Tahun" value="{{ date('Y') }}" style="width: 130px" id="data_anggaran_tahun" name="data_anggaran_tahun" onchange="set_tahun(this)">
                            </div>
                         </div>
@@ -290,24 +275,8 @@
                         <div class="ms-auto">
 
                            <div class="input-group">
-                              <span class="input-group-text">Periode Anggaran</span>
-                              <select class="form-control select center" data-placeholder="Bulan" id="perbelanja_bulan" name="perbelanja_bulan" onchange="set_tahun_detailbelanja(this)">
-                                 <option></option>
-                                 <option value="1" {{ date('m') == 1 ? 'selected' : '' }}>{{ strtoupper('Januari') }}</option>
-                                 <option value="2" {{ date('m') == 2 ? 'selected' : '' }}>{{ strtoupper('Februari') }}</option>
-                                 <option value="3" {{ date('m') == 3 ? 'selected' : '' }}>{{ strtoupper('Maret') }}</option>
-                                 <option value="4" {{ date('m') == 4 ? 'selected' : '' }}>{{ strtoupper('April') }}</option>
-                                 <option value="5" {{ date('m') == 5 ? 'selected' : '' }}>{{ strtoupper('Mei') }}</option>
-                                 <option value="6" {{ date('m') == 6 ? 'selected' : '' }}>{{ strtoupper('Juni') }}</option>
-                                 <option value="7" {{ date('m') == 7 ? 'selected' : '' }}>{{ strtoupper('Juli') }}</option>
-                                 <option value="8" {{ date('m') == 8 ? 'selected' : '' }}>{{ strtoupper('Agustus') }}</option>
-                                 <option value="9" {{ date('m') == 9 ? 'selected' : '' }}>{{ strtoupper('September') }}</option>
-                                 <option value="10" {{ date('m') == 10 ? 'selected' : '' }}>{{ strtoupper('Oktober') }}</option>
-                                 <option value="11" {{ date('m') == 11 ? 'selected' : '' }}>{{ strtoupper('November') }}</option>
-                                 <option value="12" {{ date('m') == 12 ? 'selected' : '' }}>{{ strtoupper('Desember') }}</option>
-                              </select>
+                              <span class="input-group-text">Tahun Anggaran</span>
                               <input type="text" class="form-control datepicker-default-view text-end" readonly placeholder="Tahun" value="{{ date('Y') }}" style="width: 130px" id="data_anggaran_tahun_detailbelanja" name="data_anggaran_tahun_detailbelanja" onchange="set_tahun_detailbelanja(this)">
-
                            </div>
                         </div>
                      </div>
@@ -316,22 +285,26 @@
                            <table class="table table-bordered" id="datatable-detailbelanja">
                               <thead>
                                  <tr class="border-top-success">
-                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="" rowspan="2">KODE | NAMA JENIS BELANJA</th>
-                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="" rowspan="2">PAGU</th>
-                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="" colspan="3">SPM<br></th>
-                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="" colspan="3">SP2D<br></th>
+                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="" rowspan="2">SATKER</th>
+                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="" colspan="2">BELANJA PEGAWAI<br></th>
+                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="" colspan="2">BELANJA BARANG<br></th>
+                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="" colspan="2">BELANJA MODAL<br></th>
+                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="" colspan="2">TOTAL</th>
+                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="" rowspan="2">% REALISASI<br></th>
                                  </tr>
                                  <tr>
+                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="">PAGU</th>
                                     <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="">REALISASI</th>
-                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="">PERSENTASE<br>REALISASI</th>
-                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="">TOTAL<br>FUND AVAILABLE</th>
+                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="">PAGU</th>
                                     <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="">REALISASI</th>
-                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="">PERSENTASE<br>REALISASI</th>
-                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="">TOTAL<br>FUND AVAILABLE</th>
+                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="">PAGU</th>
+                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="">REALISASI</th>
+                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="">PAGU</th>
+                                    <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle" style="">REALISASI</th>
                                  </tr>
                               </thead>
                               <tbody>
-                                 {{-- @php $total_pagu_pegawai = 0; @endphp
+                                 @php $total_pagu_pegawai = 0; @endphp
                                  @php $total_sppd_pegawai = 0; @endphp
                                  @php $total_pagu_barang = 0; @endphp
                                  @php $total_sppd_barang = 0; @endphp
@@ -365,10 +338,9 @@
                                  @endforeach
 
                               </tbody>
-                               --}}
                               <tfoot>
                                  <tr class="border-bottom-success">
-                                    <td class="text-left border-success text-success bg-success bg-opacity-10 fw-semibold">TOTAL</td>
+                                    <td class="text-left border-success text-success bg-success bg-opacity-10 fw-semibold">SEKRETARIS JENDERAL DEWAN ENERGI NASIONAL</td>
                                     <td class="text-end border-success text-success bg-success bg-opacity-10 fw-semibold total_index_belanja_1">0</td>
                                     <td class="text-end border-success text-success bg-success bg-opacity-10 fw-semibold total_index_belanja_2">0</td>
                                     <td class="text-end border-success text-success bg-success bg-opacity-10 fw-semibold total_index_belanja_3">0</td>
@@ -376,6 +348,8 @@
                                     <td class="text-end border-success text-success bg-success bg-opacity-10 fw-semibold total_index_belanja_5">0</td>
                                     <td class="text-end border-success text-success bg-success bg-opacity-10 fw-semibold total_index_belanja_6">0</td>
                                     <td class="text-end border-success text-success bg-success bg-opacity-10 fw-semibold total_index_belanja_7">0</td>
+                                    <td class="text-end border-success text-success bg-success bg-opacity-10 fw-semibold total_index_belanja_8">0</td>
+                                    <td class="text-end border-success text-success bg-success bg-opacity-10 fw-semibold total_index_belanja_9">0</td>
                                  </tr>
                               </tfoot>
                            </table>
@@ -753,9 +727,9 @@
                   // total_index_9 += parseInt(data_api[index][9].replace(/\./g, ''));
                   // total_index_10 += parseInt(data_api[index][10].replace(/\./g, ''));
                }
-               total_index_3 = (total_index_2 / total_index_1) * 100;
-               total_index_6 = (total_index_4 / total_index_2) * 100;
-               total_index_7 = (total_index_4 / total_index_1) * 100;
+               total_index_3 = (total_index_2/total_index_1)*100;
+               total_index_6 = (total_index_4/total_index_2)*100;
+               total_index_7 = (total_index_4/total_index_1)*100;
                $('.total_index_1').html(new Intl.NumberFormat('id-ID').format(total_index_1));
                $('.total_index_2').html(new Intl.NumberFormat('id-ID').format(total_index_2));
                $('.total_index_3').html(new Intl.NumberFormat('id-ID').format(total_index_3.toFixed(2)));
@@ -797,9 +771,6 @@
                   d._token = '{{ csrf_token() }}';
                   d.tahun = function() {
                      return $('#data_anggaran_tahun_detailbelanja').val();
-                  };
-                  d.bulan = function() {
-                     return $('#perbelanja_bulan').val();
                   };
                }
             },
@@ -857,6 +828,14 @@
                   "bSortable": false,
                   "sClass": "text-end align-top border-success"
                },
+               {
+                  "bSortable": false,
+                  "sClass": "text-end align-top border-success"
+               },
+               {
+                  "bSortable": false,
+                  "sClass": "text-center align-top border-success"
+               },
             ],
             "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
                // if (parseFloat(aData[7]) >= -3 && parseFloat(aData[7]) < 1) {
@@ -888,20 +867,19 @@
                var total_index_belanja_9 = 0.0;
                var total_index_belanja_10 = 0;
                for (let index = 0; index < data_api.length; index++) {
-
                   total_index_belanja_1 += parseInt(data_api[index][1].replace(/\./g, ''));
                   total_index_belanja_2 += parseInt(data_api[index][2].replace(/\./g, ''));
-                  // total_index_belanja_3 += parseInt(data_api[index][3].replace(/\./g, ''));
+                  total_index_belanja_3 += parseInt(data_api[index][3].replace(/\./g, ''));
                   total_index_belanja_4 += parseInt(data_api[index][4].replace(/\./g, ''));
                   total_index_belanja_5 += parseInt(data_api[index][5].replace(/\./g, ''));
                   total_index_belanja_6 += parseInt(data_api[index][6].replace(/\./g, ''));
                   total_index_belanja_7 += parseInt(data_api[index][7].replace(/\./g, ''));
+                  total_index_belanja_8 += parseInt(data_api[index][8].replace(/\./g, ''));
+                  total_index_belanja_9 += parseFloat(data_api[index][9]);
 
                }
 
-               total_index_belanja_3 = ((total_index_belanja_2 / total_index_belanja_1)*100).toFixed(2);
-               total_index_belanja_6 = ((total_index_belanja_5 / total_index_belanja_1)*100).toFixed(2);
-
+               total_index_belanja_9 = (total_index_belanja_9 / 3).toFixed(2);
                $('.total_index_belanja_1').html(new Intl.NumberFormat('id-ID').format(total_index_belanja_1));
                $('.total_index_belanja_2').html(new Intl.NumberFormat('id-ID').format(total_index_belanja_2));
                $('.total_index_belanja_3').html(new Intl.NumberFormat('id-ID').format(total_index_belanja_3));
@@ -910,6 +888,7 @@
                $('.total_index_belanja_6').html(new Intl.NumberFormat('id-ID').format(total_index_belanja_6));
                $('.total_index_belanja_7').html(new Intl.NumberFormat('id-ID').format(total_index_belanja_7));
                $('.total_index_belanja_8').html(new Intl.NumberFormat('id-ID').format(total_index_belanja_8));
+               $('.total_index_belanja_9').html(new Intl.NumberFormat('id-ID').format(total_index_belanja_9));
 
 
             },
@@ -1029,7 +1008,7 @@
                get_kurva_s()
             }
          })
-
+         
          $('.select').select2({
             dropdownAutoWidth: true,
             width: 'auto'

@@ -79,57 +79,36 @@ class RealisasianggaranController extends Controller
 
     public function list_apk(Request $request)
     {
-        $field_name = array(
-            'realisasi_apk_id',
-            'apk_name',
-            'realisasi_apk_urian',
-            'realisasi_apk_pagu_format',
-            'realisasi_apk_realisasi_format',
-        );
-
-        $realisasi_apk_year = $request->input('realisasi_apk_year', '');
-        $where_data = array(
-            '1 = 1',
-            'realisasi_apk_log_uuid IS NULL',
-        );
-        if ($realisasi_apk_year != 'Semua') {
-            $where_data[] = "realisasi_apk_year = '" . $realisasi_apk_year . "'";
-        }
-
-        $nama_table = 'view_trx_realisasi_apk';
-        $default_order = 'apk_sort ASC, realisasi_apk_id ASC';
-        $request->replace(['order' => null]);
-        $request->replace(['length' => -1]);
-
+        $tahun = $request->input('tahun', date('Y'));
+        $bulan = $request->input('bulan', '12');
         $result = array();
         $aaData = array();
         try {
             DB::enableQueryLog();
-            $getdata = GlobalHelper::Datatable($nama_table, $field_name, $where_data, $default_order, $request);
-            $getdata_status = $getdata['status'];
+            $getdata = DB::select('CALL get_data_apk_perbiro_by_periode(?,?)', array($tahun, $bulan));
+            $result['iTotalRecords'] = (int)((count($getdata) > 0) ? count($getdata) : 0);
+            $result["nomor"] = (($request->input('start') != null) ? ((int)$request->input('start') + 1) : 0);
+            $result['iTotalDisplayRecords'] = (int)count($getdata);
+            $result['result'] = $getdata;
+            if (count($getdata) > 0) {
+                $nomor = 1;
 
-            if ($getdata_status == 1) {
-                $result['iTotalRecords'] = (int)$getdata['iTotalDisplayRecords'];
-                $result['iTotalDisplayRecords'] = (int)$getdata['iTotalRecords'];
-                $nomor = (int)$getdata['nomor'] + 1;
-
-
-
-                foreach ($getdata['result'] as $index => $row) {
+                foreach ($getdata as $index => $row) {
                     $aaData[$index][] = $nomor;
-                    $aaData[$index][] = $row->apk_name;
-                    $aaData[$index][] = $row->realisasi_apk_urian;
-                    $aaData[$index][] = $row->realisasi_apk_pagu_format;
-                    $aaData[$index][] = $row->realisasi_apk_realisasi_format;
-                    $aaData[$index][] = $row->realisasi_apk_realisasi_format;
-                    $nomor++;
+                    $aaData[$index][] = $row->upload_apk_nama;
+                    $aaData[$index][] = $row->upload_apk_ket_name;
+                    $aaData[$index][] = $row->upload_apk_pagu_format;
+                    $aaData[$index][] = $row->upload_apk_realisasi_format;
+                    $aaData[$index][] = $row->upload_apk_sisa_format;
+                    if ($index % 2 == 0) {
+                    } else{
+                        $nomor++;
+
+                    }
                 }
             }
             $result['aaData'] = $aaData;
             $result['getdata'] = $getdata;
-            $order_data = (($request->input('order') != null) ? $request->input('order') : null);
-
-            $result['order_data'] = $order_data;
             return response(
                 json_encode($result),
                 200
@@ -169,7 +148,7 @@ class RealisasianggaranController extends Controller
         $aaData = array();
         try {
             DB::enableQueryLog();
-            $getdata = GlobalHelper::Datatable($nama_table, $field_name, $where_data, $default_order, $request);
+            $getdata = GlobalHelper::Datatable($request, $nama_table, $field_name, $where_data, $default_order);
             $getdata_status = $getdata['status'];
 
             if ($getdata_status == 1) {
@@ -292,7 +271,7 @@ class RealisasianggaranController extends Controller
             $result['categories'] = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
             $plafon_realisasi = DB::select('CALL get_data_dashboard_realisasi_anggaran(?)', array($tahun));
             $result['plafon_realisasi'] = $plafon_realisasi;
-            
+
             $result['categories_plafon_realisasi'] = array();
             $result['series_plafon_realisasi'] = array();
             // {
@@ -496,40 +475,16 @@ class RealisasianggaranController extends Controller
             $result['result'] = $getdata;
             if (count($getdata) > 0) {
                 foreach ($getdata as $index => $row) {
-                    $aaData[$index][] = '<span class="d-inline-block text-truncate" data-bs-popup="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-content="' . $row->work_unit_name . '" style="max-width: 350px;">' . $row->work_unit_name . '</span>';
-                    $aaData[$index][] = $row->pagu_pegawai_format;
-                    $aaData[$index][] = $row->sppd_pegawai_format;
-                    $aaData[$index][] = $row->pagu_barang_format;
-                    $aaData[$index][] = $row->sppd_barang_format;
-                    $aaData[$index][] = $row->pagu_modal_format;
-                    $aaData[$index][] = $row->sppd_modal_format;
-                    $aaData[$index][] = $row->total_pagu_format;
-                    $aaData[$index][] = $row->total_realisasi_format;
-                    $aaData[$index][] = $row->persentasi_realisasi;
+                    $aaData[$index][] = '<span class="d-inline-block text-truncate" data-bs-popup="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-content="' . $row->upload_belanja_nama . '" style="max-width: 350px;">' . $row->upload_belanja_nama . '</span>';
+                    $aaData[$index][] = $row->upload_belanja_spm_pagu_format;
+                    $aaData[$index][] = $row->upload_belanja_spm_realisasi_format;
+                    $aaData[$index][] = $row->upload_belanja_spm_persentase_realisasi_format;
+                    $aaData[$index][] = $row->upload_belanja_spm_total_format;
+                    $aaData[$index][] = $row->upload_belanja_spd_realisasi_format;
+                    $aaData[$index][] = $row->upload_belanja_spd_persentase_realisasi_format;
+                    $aaData[$index][] = $row->upload_belanja_spd_total_format;
                 }
             }
-            // $getdata = GlobalHelper::Datatable($nama_table, $field_name, $where_data, $default_order, $request);
-            // $getdata_status = $getdata['status'];
-
-            // if ($getdata_status == 1) {
-            //     $result['iTotalRecords'] = (int)$getdata['iTotalRecords'];
-            //     $result['iTotalDisplayRecords'] = (int)$getdata['iTotalRecords'];
-            //     $nomor = (int)$getdata['nomor'];
-            //     foreach ($getdata['result'] as $index => $row) {
-            //         $aaData[$index][] = '<span class="d-inline-block text-truncate" data-bs-popup="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-content="'.$row->work_unit_name.'" style="max-width: 350px;">'.$row->work_unit_name.'</span>';
-            //         $aaData[$index][] = $row->plafon_format;
-            //         $aaData[$index][] = $row->target_format;
-            //         $aaData[$index][] = $row->persen_target;
-            //         $aaData[$index][] = $row->realisasi_format;
-            //         $aaData[$index][] = $row->sppd_format;
-            //         $aaData[$index][] = $row->deviasi_format;
-            //         $aaData[$index][] = $row->persen_realisasi_target;
-            //         $aaData[$index][] = $row->persen_realisasi_pagu;
-            //         $aaData[$index][] = $row->sisa_anggaran_spm_format;
-            //         $aaData[$index][] = $row->sisa_anggaran_sp2d_format;
-            //         $nomor++;
-            //     }
-            // }
             $result['aaData'] = $aaData;
             $result['getdata'] = $getdata;
             return response(
@@ -544,6 +499,144 @@ class RealisasianggaranController extends Controller
         }
     }
     public function listdata_detail_per_biro_setjen(Request $request)
+    {
+        $tahun = $request->input('tahun', date('Y'));
+        $bulan = $request->input('bulan', '12');
+
+        $field_name = array(
+            'work_unit_id',
+            'work_unit_name',
+            'plafon_format',
+            'target_format',
+            'persen_target',
+            'realisasi_format',
+            'sppd_format',
+            'deviasi_format',
+            'persen_realisasi_target',
+            'persen_realisasi_pagu',
+            'sisa_anggaran_spm_format',
+            'sisa_anggaran_sp2d_format'
+        );
+        $where_data = array(
+            '1 = 1',
+            'budget_year = ' . $tahun,
+            'budget_month = ' . $bulan,
+        );
+        $nama_table = 'view_data_anggaran';
+        $default_order = 'work_unit_sort ASC';
+        $result = array();
+        $aaData = array();
+        try {
+            DB::enableQueryLog();
+            $getdata = DB::select('CALL get_data_detail_perbiro_setjen_by_periode(?,?)', array($tahun, $bulan));
+            $result['iTotalRecords'] = (int)((count($getdata) > 0) ? count($getdata) : 0);
+            $result["nomor"] = (($request->input('start') != null) ? ((int)$request->input('start') + 1) : 0);
+            $result['iTotalDisplayRecords'] = (int)count($getdata);
+            $result['result'] = $getdata;
+            if (count($getdata) > 0) {
+                foreach ($getdata as $index => $row) {
+                    // $aaData[$index][] = '<span class="d-inline-block text-truncate" data-bs-popup="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-content="' . $row->upload_belanja_nama . '" style="max-width: 350px;">' . $row->upload_belanja_nama . '</span>';
+                    $aaData[$index][] = $row->upload_paparan_program_code;
+                    $aaData[$index][] = $row->upload_paparan_program_name;
+                    $aaData[$index][] = $row->upload_paparan_program_spd_pagu_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spd_realisasi_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spd_persen_realisasi_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spd_sisa_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spd_target_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spd_persen_target_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spd_deviasi_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spd_persen_deviasi_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spm_pagu_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spm_realisasi_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spm_persen_realisasi_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spm_sisa_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spm_target_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spm_persen_target_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spm_deviasi_format;
+                    $aaData[$index][] = $row->upload_paparan_program_spm_persen_deviasi_format;
+                    $aaData[$index][] = $row->levels;
+                    $aaData[$index][] = $row->upload_paparan_program_spm_persen_deviasi;
+                }
+            }
+            $result['aaData'] = $aaData;
+            $result['getdata'] = $getdata;
+            return response(
+                json_encode($result),
+                200
+            )->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response(
+                json_encode($e->getMessage()),
+                400
+            )->header('Content-Type', 'application/json');
+        }
+    }
+    public function listdata_detail_per_biro(Request $request)
+    {
+        $tahun = $request->input('tahun', date('Y'));
+        $bulan = $request->input('bulan', '12');
+        $jenis = $request->input('jenis', 1);
+
+  
+
+
+        $field_name = array(
+            'work_unit_id',
+            'work_unit_name',
+            'plafon_format',
+            'target_format',
+            'persen_target',
+            'realisasi_format',
+            'sppd_format',
+            'deviasi_format',
+            'persen_realisasi_target',
+            'persen_realisasi_pagu',
+            'sisa_anggaran_spm_format',
+            'sisa_anggaran_sp2d_format'
+        );
+        $where_data = array(
+            '1 = 1',
+            'budget_year = ' . $tahun,
+            'budget_month = ' . $bulan,
+        );
+        $nama_table = 'view_data_anggaran';
+        $default_order = 'work_unit_sort ASC';
+        $result = array();
+        $aaData = array();
+        try {
+            DB::enableQueryLog();
+            $getdata = DB::select('CALL get_data_detail_perbiro_by_periode(?,?,?)', array($tahun, $bulan, $jenis));
+            $result['iTotalRecords'] = (int)((count($getdata) > 0) ? count($getdata) : 0);
+            $result["nomor"] = (($request->input('start') != null) ? ((int)$request->input('start') + 1) : 0);
+            $result['iTotalDisplayRecords'] = (int)count($getdata);
+            $result['result'] = $getdata;
+            if (count($getdata) > 0) {
+                foreach ($getdata as $index => $row) {
+                    // $aaData[$index][] = '<span class="d-inline-block text-truncate" data-bs-popup="popover" data-bs-trigger="hover" data-bs-placement="top" data-bs-content="' . $row->upload_belanja_nama . '" style="max-width: 350px;">' . $row->upload_belanja_nama . '</span>';
+                    $aaData[$index][] = $row->upload_work_program_code;
+                    $aaData[$index][] = $row->upload_work_program_name;
+                    $aaData[$index][] = $row->upload_nilai_program_pagu_format;
+                    $aaData[$index][] = $row->upload_nilai_program_realisasi_format;
+                    $aaData[$index][] = $row->upload_nilai_program_realisasi_percen_format;
+                    $aaData[$index][] = $row->upload_nilai_program_sisa_format;
+                    $aaData[$index][] = $row->levels;
+
+                }
+            }
+            $result['aaData'] = $aaData;
+            $result['getdata'] = $getdata;
+            return response(
+                json_encode($result),
+                200
+            )->header('Content-Type', 'application/json');
+        } catch (\Exception $e) {
+            return response(
+                json_encode($e->getMessage()),
+                400
+            )->header('Content-Type', 'application/json');
+        }
+    }
+    public function listdata_detail_per_biro_setjen_backup(Request $request)
     {
         $tahun = $request->input('tahun', date('Y'));
 
