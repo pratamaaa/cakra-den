@@ -27,7 +27,7 @@ class MultipleSheetsImport implements WithMultipleSheets, SkipsUnknownSheets, Ha
         $this->sheet_paparan = $finder->getSheetIndexByName($filePath, 'PAPARAN');
         $this->sheet_apk = $finder->getSheetIndexByName($filePath, 'APK');
         $this->year = $year;
-        $this->month = 1;//$month;
+        $this->month = $month;
         $this->document_type = $document_type;
         
         if ($this->sheet_perbagian === null) {

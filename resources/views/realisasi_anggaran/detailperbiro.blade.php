@@ -863,7 +863,8 @@
                   }
                ]
             },
-            aoColumns: [{
+            aoColumns: [
+               {
                   "bSortable": false,
                   "sClass": "text-center align-top border-success"
                },

@@ -88,7 +88,7 @@ class PeriodeUjianController extends Controller
         $aaData = array();
         try {
             DB::enableQueryLog();
-            $getdata = GlobalHelper::Datatable($nama_table, $field_name, $where_data, $default_order, $request);
+            $getdata = GlobalHelper::Datatable($request, $nama_table, $field_name, $where_data, $default_order);
             $getdata_status = $getdata['status'];
 
             if ($getdata_status == 1) {

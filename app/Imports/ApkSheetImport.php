@@ -27,7 +27,7 @@ class ApkSheetImport implements ToCollection, WithStartRow, WithCalculatedFormul
     public function __construct($year, $month)
     {
         $this->year = $year;
-        $this->month = 1;
+        $this->month = $month;
         
     }
     public function startRow(): int

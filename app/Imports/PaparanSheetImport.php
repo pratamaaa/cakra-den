@@ -27,7 +27,7 @@ class PaparanSheetImport implements ToCollection, WithStartRow, WithCalculatedFo
     public function __construct($year, $month)
     {
         $this->year = $year;
-        $this->month = 1;
+        $this->month = $month;
         
     }
     public function startRow(): int
@@ -54,15 +54,15 @@ class PaparanSheetImport implements ToCollection, WithStartRow, WithCalculatedFo
             $upload_paparan_program_uuid = Str::uuid();
             $upload_paparan_program_parent_uuid = '';
             // Trim values for each column
-            $upload_paparan_program_code = trim($row[1]);
-            $upload_paparan_program_name = trim($row[2]);
-            $upload_paparan_program_spd_pagu = trim($row[3]);
-            $upload_paparan_program_spd_realisasi = trim($row[4]);
-            $upload_paparan_program_spd_sisa = trim($row[6]);
-            $upload_paparan_program_spd_target = trim($row[10]);
-            $upload_paparan_program_spd_persen_target = trim($row[11]);
-            $upload_paparan_program_spd_deviasi = trim($row[12]);
-            $upload_paparan_program_spd_persen_deviasi = trim($row[13]);
+            $upload_paparan_program_code = trim($row[0]);
+            $upload_paparan_program_name = trim($row[1]);
+            $upload_paparan_program_spd_pagu = trim($row[2]);
+            $upload_paparan_program_spd_realisasi = trim($row[3]);
+            $upload_paparan_program_spd_sisa = trim($row[5]);
+            $upload_paparan_program_spd_target = trim($row[9]);
+            $upload_paparan_program_spd_persen_target = trim($row[10]);
+            $upload_paparan_program_spd_deviasi = trim($row[11]);
+            $upload_paparan_program_spd_persen_deviasi = trim($row[12]);
 
             // Skip the row if both columns are empty
             if (empty($upload_paparan_program_code) && empty($upload_paparan_program_name)) {

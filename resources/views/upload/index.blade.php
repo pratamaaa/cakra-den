@@ -27,9 +27,9 @@
                <tr class="">
                   <th class="text-center" width="50">No</th>
                   <th class="text-center">Jenis</th>
+                  <th class="text-center">Tahun</th>
+                  <th class="text-center">Bulan</th>
                   <th class="text-center">Tanggal Upload</th>
-                  <th class="text-center">Status</th>
-                  <th class="text-center" width="100">Aksi</th>
                </tr>
             </thead>
          </table>
@@ -40,6 +40,92 @@
 
       $(document).ready(function() {
          datatableindex = $('#datatable-index').dataTable({
+            autoWidth: false,
+            responsive: false,
+            fixedHeader: {
+               header: true,
+               footer: true
+            },
+            ajax: {
+               url: baseurl + '/upload/listdata',
+               type: "POST",
+               data: function(d) {
+                  d._token = '{{ csrf_token() }}';
+                
+               }
+            },
+            processing: true,
+            serverSide: true,
+            order: [
+               //[0, "desc"]
+            ],
+            dom: '<"datatable-scroll-wrap">',
+            buttons: {
+               dom: {
+                  button: {
+                     className: 'btn btn-light'
+                  }
+               },
+               buttons: [{
+                     extend: 'excelHtml5',
+                     title: $('.content_title').html()
+                  },
+                  {
+                     extend: 'pdfHtml5',
+                     title: $('.content_title').html()
+                  }
+               ]
+            },
+            aoColumns: [{
+                  "bSortable": false,
+                  "sClass": "text-left align-top border-success"
+               },
+               {
+                  "bSortable": false,
+                  "sClass": "text-left align-top border-success"
+               },
+               {
+                  "bSortable": false,
+                  "sClass": "text-left align-top border-success"
+               },
+               {
+                  "bSortable": false,
+                  "sClass": "text-left align-top border-success"
+               },
+               {
+                  "bSortable": false,
+                  "sClass": "text-left align-top border-success"
+               },
+               // {
+               //    "bSortable": false,
+               //    "sClass": "text-end align-top border-success"
+               // },
+
+               // {
+               //    "bSortable": false,
+               //    "sClass": "text-end align-top border-success"
+               // },
+            ],
+            "fnRowCallback": function(nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+               
+
+               // if (aData[2] == "5") {
+               //    $('td', nRow).css('background-color', 'Red');
+               // } else if (aData[2] == "4") {
+               //    $('td', nRow).css('background-color', 'Orange');
+               // }
+            },
+            drawCallback: function(settings) {
+               App.initCore();
+             
+            },
+            initComplete: function() {
+               App.initCore();
+            },
+         });
+
+
+         datatableindex = $('#datatable-indexxxx').dataTable({
             autoWidth: false,
             responsive: true,
             ajax: {
