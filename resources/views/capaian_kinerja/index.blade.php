@@ -38,6 +38,14 @@
                               {{-- <th class="text-center border-success text-success bg-success bg-opacity-10 align-middle">% Anggaran</th> --}}
                            </tr>
                         </thead>
+                        <tfoot>
+                           <tr>
+                              <td class="text-left border-success text-success bg-success bg-opacity-10 fw-semibold" colspan="6">RATA RATA NILAI KINERJA ORGANISASI</td>
+                              <td class="text-end border-success text-success bg-success bg-opacity-10 fw-semibold total_capaian">0</td>
+                              {{-- <td class="text-end border-success text-success bg-success bg-opacity-10 fw-semibold total_index_8">0</td>
+                              <td class="text-end border-success text-success bg-success bg-opacity-10 fw-semibold total_index_9">0</td> --}}
+                           </tr>
+                        </tfoot>
                      </table>
                   </div>
 
@@ -141,6 +149,20 @@
             ],
             drawCallback: function(settings) {
                App.initCore();
+               var api = this.api();
+               var data_api = api.rows({
+                  page: 'current'
+               }).data();
+               var response = settings.json;
+               var total_capaian = 0;
+               // console.log(data_api.length)
+               for (let index = 0; index < data_api.length; index++) {
+                  total_capaian += parseFloat(data_api[index][6].replace(/\./g, ''));
+               }
+               total_capaian = (total_capaian/data_api.length).toFixed(2);
+               $('.total_capaian').html(new Intl.NumberFormat('id-ID').format(total_capaian));
+
+               // console.log(total_capaian/data_api.length)
                $('body').addClass('loaded');
 
                //   afterloaddatatable();
