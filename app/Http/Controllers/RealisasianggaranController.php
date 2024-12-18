@@ -407,7 +407,7 @@ class RealisasianggaranController extends Controller
                    
                     $realisasi = Trx_upload_paparan_program::where('upload_paparan_program_status', 1)
                         ->whereNull('upload_paparan_program_log_uuid')
-                        ->where('upload_paparan_program_parent_uuid', '0')
+                        ->where('upload_paparan_program_work_unit_uuid', $work_unit_uuid)
                         ->where('upload_paparan_program_year', $tahun)
                         ->where('upload_paparan_program_month', '=', ($key + 1))
                         
