@@ -13,8 +13,10 @@ use App\Models\View_data_realisasi_item_sppd;
 use App\Models\Mst_work_units;
 use App\Models\Trx_target;
 use App\Models\Trx_budgets;
+use App\Models\Trx_upload_paparan_program;
 use App\Models\View_trx_budgets;
 use App\Models\View_trx_realisasi_apk;
+
 use App\Models\View_trx_target;
 use App\Helpers\GlobalHelper;
 
@@ -345,11 +347,13 @@ class RealisasianggaranController extends Controller
                     }
 
 
-                    $realisasi = Trx_budgets::where('budget_status', 1)
-                        ->whereNull('budget_log_uuid')
-                        ->where('budget_year', $tahun)
-                        ->where('budget_month', '=', ($key + 1))
-                        ->sum('budget_realization');
+                    $realisasi = Trx_upload_paparan_program::where('upload_paparan_program_status', 1)
+                        ->whereNull('upload_paparan_program_log_uuid')
+                        ->where('upload_paparan_program_parent_uuid', '0')
+                        ->where('upload_paparan_program_year', $tahun)
+                        ->where('upload_paparan_program_month', '=', ($key + 1))
+                        
+                        ->sum('upload_paparan_program_spd_realisasi');
                 } else {
                     $target = View_trx_target::where('target_status', 1)
                         ->whereNull('target_log_uuid')
@@ -400,12 +404,14 @@ class RealisasianggaranController extends Controller
                         $arrtarget[11] = 0;
                     }
 
-                    $realisasi = View_trx_budgets::where('budget_status', 1)
-                        ->whereNull('budget_log_uuid')
-                        ->where('work_program_work_unit_uuid', $work_unit_uuid)
-                        ->where('budget_year', $tahun)
-                        ->where('budget_month', '=', ($key + 1))
-                        ->sum('budget_realization');
+                   
+                    $realisasi = Trx_upload_paparan_program::where('upload_paparan_program_status', 1)
+                        ->whereNull('upload_paparan_program_log_uuid')
+                        ->where('upload_paparan_program_parent_uuid', '0')
+                        ->where('upload_paparan_program_year', $tahun)
+                        ->where('upload_paparan_program_month', '=', ($key + 1))
+                        
+                        ->sum('upload_paparan_program_spd_realisasi');
                 }
                 if ($target_show == 1) {
                     // $arrtarget[$key] = $target * 1;
