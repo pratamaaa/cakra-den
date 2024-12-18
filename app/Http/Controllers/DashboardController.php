@@ -117,7 +117,7 @@ class DashboardController extends Controller
                 }
 
                 if ($checkfirst == 0) {
-                    $dashboard_realisasi_revision_name = 'PAGU AWAL';
+                    $dashboard_realisasi_revision_name = 'DIPA INDUK';
                 }
                 $data_create = new Trx_dashboard_realisasi;
                 $data_create->dashboard_realisasi_uuid = $this->uuid();

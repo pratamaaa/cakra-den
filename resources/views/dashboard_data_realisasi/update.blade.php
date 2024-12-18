@@ -51,7 +51,8 @@
                      <div class="col-lg-9">
                         <select class="form-control select wajib" data-placeholder="Jenis Revisi" id="dashboard_realisasi_revision_name" name="dashboard_realisasi_revision_name">
                            <option></option>
-                           <option value="PAGU AWAL" {{ $detail->dashboard_realisasi_revision_name == 'PAGU AWAL' ? 'selected' : '' }}>PAGU AWAL</option>
+                           <option value="DIPA INDUK" {{ $detail->dashboard_realisasi_revision_name == 'DIPA INDUK' ? 'selected' : '' }}>DIPA INDUK</option>
+                           <option value="DIPA" {{ $detail->dashboard_realisasi_revision_name == 'DIPA' ? 'selected' : '' }}>DIPA</option>
                            <option value="POK" {{ $detail->dashboard_realisasi_revision_name == 'POK' ? 'selected' : '' }}>POK</option>
                         </select>
                      </div>
