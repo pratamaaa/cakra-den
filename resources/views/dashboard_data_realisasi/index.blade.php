@@ -26,7 +26,7 @@
                   <select class="form-control select wajib" data-placeholder="Tahun Anggaran" id="dashboard_realisasi_year" name="dashboard_realisasi_year">
                      <option></option>
 
-                     @for ($i = date('Y')-5; $i <= date('Y')+1; $i++)
+                     @for ($i = date('Y') - 5; $i <= date('Y') + 1; $i++)
                         <option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>{{ $i }}</option>
                      @endfor
                   </select>
@@ -63,6 +63,53 @@
    <script type="text/javascript">
       var datatableindex;
 
+      function hapus_data(ini) {
+         var uuid = $(ini).attr('data-uuid');
+         const swalInit = swal.mixin({
+            buttonsStyling: false,
+            customClass: {
+               confirmButton: 'btn btn-primary',
+               cancelButton: 'btn btn-light',
+               denyButton: 'btn btn-light',
+               input: 'form-control'
+            }
+         });
+
+         swalInit.fire({
+            title: 'Konfirmasi?',
+            html: "Apakah anda yakin Menghapus data ini?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'YAKIN',
+            cancelButtonText: 'BATAL',
+            buttonsStyling: false,
+            customClass: {
+               confirmButton: 'btn btn-success',
+               cancelButton: 'btn btn-danger'
+            }
+         }).then(function(result) {
+            if (result.value) {
+               $('body').removeClass('loaded');
+               $.ajax({
+                  url: baseurl + '/dashboard/delete_datarealisasi',
+                  type: "post",
+                  dataType: 'json',
+                  data: {
+                     _token : '{{ csrf_token() }}',
+                     dashboard_realisasi_uuid: uuid
+                  },
+                  success: function(data) {
+                     $('#datatable-index').DataTable().ajax.reload();
+
+                     $('body').addClass('loaded');
+                  }
+               });
+            } else if (result.dismiss === swal.DismissReason.cancel) {
+               return false;
+            }
+         });
+      }
+
       function cari(jenis) {
          var dashboard_realisasi_year = $('#dashboard_realisasi_year').val();
          var participant_approval_iief_status_name = $('#participant_approval_iief_status_name').val();
@@ -71,6 +118,7 @@
          $('#datatable-index').DataTable().ajax.reload();
 
       }
+
       $(document).ready(function() {
          $('body').removeClass('loaded');
 

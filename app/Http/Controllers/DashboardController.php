@@ -27,6 +27,51 @@ class DashboardController extends Controller
         $data = array();
         return view('dashboard_data_realisasi.index', $data);
     }
+    public function delete_datarealisasi(Request $request)
+    {
+        $data = array();
+        if ($this->method == 'POST') {
+
+            $dashboard_realisasi_uuid = htmlentities($request->input('dashboard_realisasi_uuid', null));
+         
+            try {
+                DB::beginTransaction();
+                $data_delete = Trx_dashboard_realisasi::where('dashboard_realisasi_status', 1)
+                    ->where('dashboard_realisasi_uuid', $dashboard_realisasi_uuid)
+                    ->whereNull('dashboard_realisasi_log_uuid')
+                    ->first();
+
+                $data_delete->dashboard_realisasi_status = 0;
+                $data_delete->dashboard_realisasi_log_uuid = $dashboard_realisasi_uuid;
+                $data_delete->save();
+                $data['status'] = 1;
+                $data['message'] = 'Berhasil';
+                DB::commit();
+                return response(
+                    json_encode($data),
+                    200
+                )->header('Content-Type', 'application/json');
+            } catch (\Exception $e) {
+
+                DB::rollback();
+                $data['status'] = 0;
+                $data['message'] = 'Gagal';
+                DB::commit();
+                return response(
+                    json_encode($data),
+                    200
+                )->header('Content-Type', 'application/json');
+            }
+        } else {
+            $data['status'] = 0;
+            $data['message'] = 'Gagal';
+            DB::commit();
+            return response(
+                json_encode($data),
+                200
+            )->header('Content-Type', 'application/json');
+        }
+    }
     public function create_datarealisasi(Request $request)
     {
         $data = array();
@@ -47,13 +92,16 @@ class DashboardController extends Controller
             $dashboard_realisasi_barang = htmlentities($request->input('dashboard_realisasi_barang', null));
             $dashboard_realisasi_modal = htmlentities($request->input('dashboard_realisasi_modal', null));
             $dashboard_realisasi_total_belanja = htmlentities($request->input('dashboard_realisasi_total_belanja', null));
-            $dashboard_realisasi_pegawai = str_replace('.', '', $dashboard_realisasi_pegawai)*1;
-            $dashboard_realisasi_barang = str_replace('.', '', $dashboard_realisasi_barang)*1;
-            $dashboard_realisasi_modal = str_replace('.', '', $dashboard_realisasi_modal)*1;
-            $dashboard_realisasi_total_belanja = str_replace('.', '', $dashboard_realisasi_total_belanja)*1;
+            $dashboard_realisasi_pegawai = str_replace('.', '', $dashboard_realisasi_pegawai) * 1;
+            $dashboard_realisasi_barang = str_replace('.', '', $dashboard_realisasi_barang) * 1;
+            $dashboard_realisasi_modal = str_replace('.', '', $dashboard_realisasi_modal) * 1;
+            $dashboard_realisasi_total_belanja = str_replace('.', '', $dashboard_realisasi_total_belanja) * 1;
             try {
                 DB::beginTransaction();
-
+                $checkfirst = Trx_dashboard_realisasi::where('dashboard_realisasi_status', 1)
+                    ->where('dashboard_realisasi_year', $dashboard_realisasi_year)
+                    ->whereNull('dashboard_realisasi_log_uuid')
+                    ->count();
                 $check_dashboard_realisasi = Trx_dashboard_realisasi::where('dashboard_realisasi_status', 1)
                     ->where('dashboard_realisasi_year', $dashboard_realisasi_year)
                     ->where('dashboard_realisasi_revision_name', $dashboard_realisasi_revision_name)
@@ -66,6 +114,10 @@ class DashboardController extends Controller
                     $dashboard_realisasi_version = 1;
                 } else {
                     $dashboard_realisasi_version = $check_dashboard_realisasi->dashboard_realisasi_version + 1;
+                }
+
+                if ($checkfirst == 0) {
+                    $dashboard_realisasi_revision_name = 'PAGU AWAL';
                 }
                 $data_create = new Trx_dashboard_realisasi;
                 $data_create->dashboard_realisasi_uuid = $this->uuid();
@@ -121,7 +173,10 @@ class DashboardController extends Controller
             $dashboard_realisasi_barang = htmlentities($request->input('dashboard_realisasi_barang', null));
             $dashboard_realisasi_modal = htmlentities($request->input('dashboard_realisasi_modal', null));
             $dashboard_realisasi_total_belanja = htmlentities($request->input('dashboard_realisasi_total_belanja', null));
-
+            $dashboard_realisasi_pegawai = str_replace('.', '', $dashboard_realisasi_pegawai) * 1;
+            $dashboard_realisasi_barang = str_replace('.', '', $dashboard_realisasi_barang) * 1;
+            $dashboard_realisasi_modal = str_replace('.', '', $dashboard_realisasi_modal) * 1;
+            $dashboard_realisasi_total_belanja = str_replace('.', '', $dashboard_realisasi_total_belanja) * 1;
             try {
                 DB::beginTransaction();
 
@@ -161,11 +216,14 @@ class DashboardController extends Controller
             $dashboard_realisasi_uuid = htmlentities($request->input('uuid', null));
             $detail = View_trx_dashboard_realisasi::where('dashboard_realisasi_status', 1)
                 ->where('dashboard_realisasi_uuid', $dashboard_realisasi_uuid)
-                ->where('dashboard_realisasi_version', 0)
+                // ->where('dashboard_realisasi_version', 0)
                 ->whereNull('dashboard_realisasi_log_uuid')
                 ->first();
-            $data['detail'] = $detail;
 
+            $data['detail'] = $detail;
+            // echo '<pre>';
+            // print_r($detail);
+            // die();
             return view('dashboard_data_realisasi.update', $data);
         }
     }
@@ -177,9 +235,10 @@ class DashboardController extends Controller
         $dashboard_realisasi_uuid = htmlentities($request->input('uuid', null));
         $detail = View_trx_dashboard_realisasi::where('dashboard_realisasi_status', 1)
             ->where('dashboard_realisasi_uuid', $dashboard_realisasi_uuid)
-            ->where('dashboard_realisasi_version', 0)
+            // ->where('dashboard_realisasi_version', 0)
             ->whereNull('dashboard_realisasi_log_uuid')
             ->first();
+
         $data['detail'] = $detail;
 
         return view('dashboard_data_realisasi.detail', $data);
@@ -271,7 +330,8 @@ class DashboardController extends Controller
                     $aksi .= '<a href="' . URL::to('/dashboard/update_datarealisasi?uuid=' . $row->dashboard_realisasi_uuid) . '" class="text-body" style="margin-left:2px;margin-right:2px;" data-bs-popup="tooltip" data-bs-placement="top" data-bs-original-title="Update Data"><i class="ph-note-pencil"></i></a>';
 
                     $aksi .= '<a href="' . URL::to('/dashboard/detail_datarealisasi?uuid=' . $row->dashboard_realisasi_uuid) . '" class="text-body" style="margin-left:2px;margin-right:2px;" data-bs-popup="tooltip" data-bs-placement="top" data-bs-original-title="Lihat Data"><i class="ph-clipboard-text"></i></a>';
-                    // $aksi .= '<a href="'.URL::to('/dashboard/update?uuid='.$row->exam_period_uuid).'" class="text-body" style="margin-left:2px;margin-right:2px;" data-bs-popup="tooltip" data-bs-placement="auto" data-bs-original-title="Bottom tooltip"><i class="ph-gear"></i></a>';
+                    $aksi .= '<a href="javascript:void(0)" onclick="hapus_data(this)" data-uuid="' . $row->dashboard_realisasi_uuid . '" class="text-body" style="margin-left:2px;margin-right:2px;" data-bs-popup="tooltip" data-bs-placement="top" data-bs-original-title="Hapus Data"><i class="ph-trash"></i></a>';
+
                     $aksi .= '</div>';
                     $aaData[$index][] = $aksi;
                     $nomor++;

@@ -47,7 +47,7 @@
                      </div>
                   </div>
                   <div class="row mb-2">
-                     <label class="col-lg-3 col-form-label">Jenis Revisi <span class="text-danger">*</span></label>
+                     <label class="col-lg-3 col-form-label">Jenis Revisi<span class="text-danger">*</span></label>
                      <div class="col-lg-9">
                         <select class="form-control select wajib" data-placeholder="Jenis Revisi" id="dashboard_realisasi_revision_name" name="dashboard_realisasi_revision_name">
                            <option></option>
