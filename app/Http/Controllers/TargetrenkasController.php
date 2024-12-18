@@ -103,7 +103,7 @@ class TargetrenkasController extends Controller
 
             $data['temp_uuid'] = $this->uuid();
             $work_unit = Mst_work_units::where('work_unit_status', 1)
-                ->where('work_unit_parent_uuid', '<>', '0')
+                // ->where('work_unit_parent_uuid', '<>', '0')
                 ->orderBy('work_unit_sort', 'asc')
                 ->whereNull('work_unit_log_uuid')
                 ->get();
