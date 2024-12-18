@@ -300,6 +300,7 @@ class RealisasianggaranController extends Controller
                 if ($satker->work_unit_parent_uuid == '0') {
                     $target = View_trx_target::where('target_status', 1)
                         ->whereNull('target_log_uuid')
+                        ->where('target_work_unit_uuid', $work_unit_uuid)
                         ->where('target_year', $tahun)
                         ->groupBy('target_year')
                         ->select(
@@ -318,6 +319,9 @@ class RealisasianggaranController extends Controller
                     SUM(`target_value_12`) AS `target_value_12`
                     ')
                         )->first();
+                        // echo '<pre>';
+                        // print_r($work_unit_uuid);
+                        // die();
                     if ($target != null) {
                         $arrtarget[0] = $target->target_value_1 * 1;
                         $arrtarget[1] = $target->target_value_2 * 1;

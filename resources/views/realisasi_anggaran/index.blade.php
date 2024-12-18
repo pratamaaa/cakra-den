@@ -167,11 +167,14 @@
                   },
                   yAxis: {
                      title: {
-                        text: 'Rupiah'
+                        text: 'Rupiah (Rp)'
                      },
                      labels: {
-                        // format: '{value:%b %e}'
-                     },
+                        formatter: function() {
+                           // Konversi nilai menjadi miliar (M)
+                           return this.value / 1e9 + ' M';
+                        }
+                     }
                   },
                   tooltip: {
                      crosshairs: true,
@@ -204,8 +207,11 @@
                      categories: categories_plafon_realisasi,
                      crosshair: true,
                      labels: {
-                        format: '{value:%b %e}'
-                     },
+                        formatter: function() {
+                           // Konversi nilai menjadi miliar (M)
+                           return this.value / 1e9 + ' M';
+                        }
+                     }
                   },
                   yAxis: {
                      min: 0,
@@ -213,8 +219,11 @@
                         text: 'Rupiah (Rp)'
                      },
                      labels: {
-                        format: '{value:%b %e}'
-                     },
+                        formatter: function() {
+                           // Konversi nilai menjadi miliar (M)
+                           return this.value / 1e9 + ' M';
+                        }
+                     }
                   },
                   tooltip: {
                      headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
@@ -222,7 +231,16 @@
                         '<td style="padding:0"><b>{point.y:.1f} M</b></td></tr>',
                      footerFormat: '</table>',
                      shared: true,
-                     useHTML: true
+                     useHTML: true,
+                     formatter: function() {
+                        return '<span style="font-size:10px">' + this.x + '</span><table>' +
+                           this.points.map(point =>
+                              '<tr><td style="color:' + point.series.color + ';padding:0">' +
+                              point.series.name + ': </td><td style="padding:0">' +
+                              '<b>' + (point.y / 1e9).toFixed(2) + ' M</b></td></tr>'
+                           ).join('') +
+                           '</table>';
+                     }
                   },
                   plotOptions: {
                      column: {
