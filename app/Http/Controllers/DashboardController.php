@@ -47,7 +47,10 @@ class DashboardController extends Controller
             $dashboard_realisasi_barang = htmlentities($request->input('dashboard_realisasi_barang', null));
             $dashboard_realisasi_modal = htmlentities($request->input('dashboard_realisasi_modal', null));
             $dashboard_realisasi_total_belanja = htmlentities($request->input('dashboard_realisasi_total_belanja', null));
-
+            $dashboard_realisasi_pegawai = str_replace('.', '', $dashboard_realisasi_pegawai)*1;
+            $dashboard_realisasi_barang = str_replace('.', '', $dashboard_realisasi_barang)*1;
+            $dashboard_realisasi_modal = str_replace('.', '', $dashboard_realisasi_modal)*1;
+            $dashboard_realisasi_total_belanja = str_replace('.', '', $dashboard_realisasi_total_belanja)*1;
             try {
                 DB::beginTransaction();
 
