@@ -157,7 +157,8 @@
                var total_capaian = 0;
                // console.log(data_api.length)
                for (let index = 0; index < data_api.length; index++) {
-                  total_capaian += parseFloat(data_api[index][6].replace(/\./g, ''));
+                  
+                  total_capaian += parseFloat(data_api[index][6]);
                }
                total_capaian = (total_capaian/data_api.length).toFixed(2);
                $('.total_capaian').html(new Intl.NumberFormat('id-ID').format(total_capaian));
